@@ -1,9 +1,16 @@
-ipykernel
-datasets 
-tqdm
+# Core ML
 numpy
 pandas
+scikit-learn
+xgboost
+imbalanced-learn
+sentence-transformers
+datasets
 matplotlib
 seaborn
-scikit-learn
-imblearn
+ipykernel
+tqdm
+fastapi
+uvicorn[standard]
+python-multipart
+joblib

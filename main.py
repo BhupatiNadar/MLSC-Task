@@ -1,5 +1,6 @@
-def main():
-    print("Hello from mlsc-task!")
+#!/usr/bin/env python3
+
+from src.groundedness_model import main
 
 
 if __name__ == "__main__":
