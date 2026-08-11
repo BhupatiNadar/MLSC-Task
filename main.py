@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
-from src.groundedness_model import main
-
+def main():
+    pass
 
 if __name__ == "__main__":
     main()
