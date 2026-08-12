@@ -93,18 +93,17 @@ def preprocess(question: str, document: list, answer: str):
     # 3. Numeric overlap
     num_overlap = numeric_overlap(answer, doc_str)
     
-    # Ensure columns match training data order and names
-    features = pd.DataFrame([{
-        'doc_response_similarity': doc_response_sim,
-        'question_response_similarity': question_response_sim,
-        'question_document_similarity': question_doc_sim,
-        'tfidf_doc_response_sim': tfidf_doc_response_sim,
-        'tfidf_question_response_sim': tfidf_question_response_sim,
-        'tfidf_question_document_sim': tfidf_question_doc_sim,
-        'numeric_overlap': num_overlap
-    }])
+    # Features actually fed to the classifier — the 1152-dim stacked embeddings
+    model_features = np.hstack([q_emb, d_emb, a_emb])
     
-    return features
+    # Embeddings kept separately (for logging / storage / debugging — not for predict_proba)
+    embeddings = {
+        'question_embeddings': q_emb[0],
+        'document_embeddings': d_emb[0],
+        'response_embeddings': a_emb[0],
+    }
+    
+    return model_features, embeddings
 
 def run_inference(model, features):
     probs = model.predict_proba(features)[0]
@@ -115,8 +114,8 @@ def run_inference(model, features):
 @app.post("/predict", response_model=PredictResponse)
 def predict(request: PredictRequest):
     try:
-        features = preprocess(request.question, request.document, request.answer)
-        label, confidence = run_inference(ml_models["model"], features)
+        model_features, embeddings = preprocess(request.question, request.document, request.answer)
+        label, confidence = run_inference(ml_models["model"], model_features)
         return PredictResponse(label=label, confidence=confidence)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
