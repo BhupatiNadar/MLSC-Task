@@ -14,3 +14,5 @@ fastapi
 uvicorn[standard]
 python-multipart
 joblib
+lightgbm
+catboost
