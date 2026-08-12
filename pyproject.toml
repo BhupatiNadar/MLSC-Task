@@ -20,4 +20,5 @@ dependencies = [
     "uvicorn[standard]>=0.34.0",
     "python-multipart>=0.0.20",
     "joblib>=1.4.0",
+    "imbalanced-learn>=0.14.2",
 ]
